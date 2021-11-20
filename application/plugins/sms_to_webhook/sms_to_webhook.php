@@ -79,7 +79,7 @@ function sms_to_webhook($sms)
 	$webhook_url = $config['webhook_url'];
 	
     $CI =& get_instance();
-    $CI->load->model('sms_to_webhook/sms_to_webhook_model', 'plugin_model');
+    //$CI->load->model('sms_to_webhook/sms_to_webhook_model', 'plugin_model');
     $CI->load->library('sms_to_webhook/curl', 'curl');
     
     $CI->curl->get($webhook_url, array('phone' => $number, 'text' => $message, 'smscenter'=> $smscenter));
