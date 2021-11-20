@@ -90,8 +90,8 @@ function sms_to_webhook($sms)
     
     //$response = $CI->webhook->get($webhook_url, array('phone' => $number, 'text' => $message, 'smscenter'=> $smscenter));
     //autoreply($sms, $response);
-	$response = file_get_contents($webhook_url + '?' + "phone=$number&text=$message&smscenter=$smscenter");
-	file_get_contents("http://localhost/index.php/plugin/rest_api/send_sms?phoneNumber=$number&message=$response");
+	$response = file_get_contents($webhook_url + '?' + "phone=$number&text=" + urlencode($message) + "&smscenter=$smscenter");
+	file_get_contents("http://localhost/index.php/plugin/rest_api/send_sms?phoneNumber=$number&message=" + urlencode($response));
 	
 }
 
