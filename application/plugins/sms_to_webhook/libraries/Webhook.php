@@ -2,7 +2,7 @@
 /**
  * simple http client helper
  */
-class Curl {
+class Webhook {
 
     function __construct() {
 
