@@ -86,7 +86,7 @@ function sms_to_webhook($sms)
     $CI->load->library('sms_to_webhook/webhook', 'webhook');
     
     $response = $CI->webhook->get($webhook_url, array('phone' => $number, 'text' => $message, 'smscenter'=> $smscenter));
-    autoreply($sms, $response);
+    //autoreply($sms, $response);
 	
 }
 
