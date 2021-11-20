@@ -57,7 +57,7 @@ function sms_to_webhook_deactivate()
 function sms_to_webhook_install()
 {
 	$CI =& get_instance();
-	$CI->load->helper('kalkun');
+	//$CI->load->helper('kalkun');
     //TODO: create a history table
 	// check if table already exist
 	// if (!$CI->db->table_exists('plugin_sms_to_webhook'))
