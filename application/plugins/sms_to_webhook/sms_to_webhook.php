@@ -81,6 +81,8 @@ function sms_to_webhook($sms)
     $smscenter = $sms->SMSCNumber;
 	
 	$webhook_url = $config['webhook_url'];
+
+	print_r($webhook_url);
 	
     $CI =& get_instance();
     //$CI->load->model('sms_to_webhook/sms_to_webhook_model', 'plugin_model');
