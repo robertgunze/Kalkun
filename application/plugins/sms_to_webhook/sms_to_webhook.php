@@ -17,7 +17,7 @@ function sms_to_webhook_initialize()
 	$CI->load->add_package_path(APPPATH.'plugins/sms_to_webhook', FALSE);
 	$CI->load->config('sms_to_webhook', TRUE);
 
-	return $CI->config->config['sms_to_webhook'];
+	return $CI->config->item['sms_to_webhook'];
 }
 
 // Add hook for incoming message
