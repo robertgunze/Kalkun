@@ -16,7 +16,6 @@ class Webhook {
 		}
 
         curl_setopt($conn, CURLOPT_URL, $url);
-		print_r("Webhook url" + $url);
         curl_setopt($conn, CURLOPT_RETURNTRANSFER, true);
 
         $response = curl_exec($conn);

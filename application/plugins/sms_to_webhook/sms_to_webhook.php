@@ -85,8 +85,22 @@ function sms_to_webhook($sms)
     //$CI->load->model('sms_to_webhook/sms_to_webhook_model', 'plugin_model');
     $CI->load->library('sms_to_webhook/webhook', 'webhook');
     
-    $CI->webhook->get($webhook_url, array('phone' => $number, 'text' => $message, 'smscenter'=> $smscenter));
+    $response = $CI->webhook->get($webhook_url, array('phone' => $number, 'text' => $message, 'smscenter'=> $smscenter));
+    autoreply($sms, $response);
 	
+}
+
+function autoreply ($sms, $reply) {
+
+    $CI =& get_instance();
+    $CI->load->model('Message_model');
+	$data['coding'] = 'default';
+	$data['class'] = '1';
+	$data['dest'] = $sms->SenderNumber;
+	$data['date'] = date('Y-m-d H:i:s');
+	$data['message'] = $reply;
+	$data['delivery_report'] = 'default';
+	$CI->Message_model->send_messages($data);
 }
 
 /* End of file sms_to_webhook.php */
