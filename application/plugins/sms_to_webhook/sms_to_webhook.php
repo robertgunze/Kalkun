@@ -3,6 +3,8 @@
 * Plugin Name: SMS to Webhook
 * Version: 0.1
 * Description: Sending SMS to a webhook
+* Author: Robert Gunze
+* Author URI: https://nexis.co.tz
 */
 
 function sms_to_webhook_initialize()
