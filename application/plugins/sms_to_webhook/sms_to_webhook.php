@@ -17,7 +17,7 @@ function sms_to_webhook_initialize()
 	$CI->load->add_package_path(APPPATH.'plugins/sms_to_webhook', FALSE);
 	$CI->load->config('sms_to_webhook', TRUE);
 
-	return $CI->config->item['sms_to_webhook'];
+	return $CI->config->config['sms_to_webhook'];
 }
 
 // Add hook for incoming message
@@ -75,6 +75,7 @@ function sms_to_webhook_install()
 function sms_to_webhook($sms)
 {
 	$config = sms_to_webhook_initialize();
+	print_r($config);
 	$message = $sms->TextDecoded;
 	$number = $sms->SenderNumber;
     $smscenter = $sms->SMSCNumber;
