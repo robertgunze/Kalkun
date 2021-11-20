@@ -100,6 +100,7 @@ function autoreply ($sms, $reply) {
 	$data['date'] = date('Y-m-d H:i:s');
 	$data['message'] = $reply;
 	$data['delivery_report'] = 'default';
+    $data['uid'] = '1';
 	$CI->Message_model->send_messages($data);
 }
 
