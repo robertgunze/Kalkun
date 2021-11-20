@@ -40,9 +40,9 @@ $active_record = TRUE;
 $db['default']['hostname'] = "127.0.0.1";
 
 // MySQL
-$db['default']['username'] = "root";
-$db['default']['password'] = "password";
-$db['default']['database'] = "kalkun";
+$db['default']['username'] = "smsd";
+$db['default']['password'] = "123wsx";
+$db['default']['database'] = "smsd";
 $db['default']['dbdriver'] = "mysqli";
 
 // PostgreSQL

@@ -3,7 +3,7 @@
 if(php_sapi_name() != 'cli' && !empty($_SERVER['REMOTE_ADDR'])) exit("Access Denied.");	
 
 // Please configure this
-$url = "http://localhost/kalkun";
+$url = "http://localhost";
 
 fclose(fopen($url."/index.php/daemon/outbox_routine/", "r"));
 
