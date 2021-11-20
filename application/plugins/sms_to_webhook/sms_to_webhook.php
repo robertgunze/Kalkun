@@ -1,0 +1,87 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+* Plugin Name: SMS to Webhook
+* Version: 0.1
+* Description: Sending SMS to a webhook
+*/
+
+function sms_to_webhook_initialize()
+{
+	$CI =& get_instance();
+
+	$CI->load->add_package_path(APPPATH.'plugins/sms_to_webhook', FALSE);
+	$CI->load->config('sms_to_webhook', TRUE);
+
+	return $CI->config->config['sms_to_webhook'];
+}
+
+// Add hook for incoming message
+add_action("message.incoming.before", "sms_to_webhook", 15);
+
+/**
+* Function called when plugin first activated
+* Utility function must be prefixed with the plugin name
+* followed by an underscore.
+* 
+* Format: pluginname_activate
+* 
+*/
+function sms_to_webhook_activate()
+{
+    return true;
+}
+
+/**
+* Function called when plugin deactivated
+* Utility function must be prefixed with the plugin name
+* followed by an underscore.
+* 
+* Format: pluginname_deactivate
+* 
+*/
+function sms_to_webhook_deactivate()
+{
+    return true;
+}
+
+/**
+* Function called when plugin first installed into the database
+* Utility function must be prefixed with the plugin name
+* followed by an underscore.
+* 
+* Format: pluginname_install
+* 
+*/
+function sms_to_webhook_install()
+{
+	$CI =& get_instance();
+	$CI->load->helper('kalkun');
+    //TODO: create a history table
+	// check if table already exist
+	// if (!$CI->db->table_exists('plugin_sms_to_webhook'))
+	// {
+	// 	$db_driver = $CI->db->platform();
+	// 	$db_prop = get_database_property($db_driver);
+	// 	execute_sql(APPPATH."plugins/sms_to_webhook/media/".$db_prop['file']."_sms_to_webhook.sql");
+	// }	
+    return true;
+}
+
+function sms_to_webhook($sms)
+{
+	$config = sms_to_webhook_initialize();
+	$message = $sms->TextDecoded;
+	$number = $sms->SenderNumber;
+	
+	$webhook_url = $config['webhook_url'];
+	
+    $CI =& get_instance();
+    $CI->load->model('sms_to_webhook/sms_to_webhook_model', 'plugin_model');
+    $CI->load->library('sms_to_webhook/curl', 'curl');
+    
+    $CI->curl->call('statuses/update', array('status' => $twitter_msg));
+	
+}
+
+/* End of file sms_to_webhook.php */
+/* Location: ./application/plugins/sms_to_webhook/sms_to_webhook.php */
