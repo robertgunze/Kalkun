@@ -8,6 +8,8 @@
 * Author URI: https://nexis.co.tz
 */
 
+error_reporting(E_ALL);
+
 function sms_to_webhook_initialize()
 {
 	$CI =& get_instance();
