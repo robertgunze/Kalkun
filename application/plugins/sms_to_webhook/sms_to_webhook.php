@@ -1,6 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
 * Plugin Name: SMS to Webhook
+* Plugin URI: https://github.com/robertgunze/Kalkun.git
 * Version: 0.1
 * Description: Sending SMS to a webhook
 * Author: Robert Gunze
