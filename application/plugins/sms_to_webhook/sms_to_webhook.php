@@ -21,7 +21,7 @@ function sms_to_webhook_initialize()
 }
 
 // Add hook for incoming message
-add_action("message.incoming.before", "sms_to_webhook", 150);
+add_action("message.incoming.before", "sms_to_webhook", 15);
 
 /**
 * Function called when plugin first activated
