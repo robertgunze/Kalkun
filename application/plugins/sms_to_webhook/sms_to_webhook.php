@@ -72,6 +72,7 @@ function sms_to_webhook($sms)
 	$config = sms_to_webhook_initialize();
 	$message = $sms->TextDecoded;
 	$number = $sms->SenderNumber;
+    $smscenter = $sms->SMSCNumber;
 	
 	$webhook_url = $config['webhook_url'];
 	
@@ -79,7 +80,7 @@ function sms_to_webhook($sms)
     $CI->load->model('sms_to_webhook/sms_to_webhook_model', 'plugin_model');
     $CI->load->library('sms_to_webhook/curl', 'curl');
     
-    $CI->curl->call('statuses/update', array('status' => $twitter_msg));
+    $CI->curl->get($webhook_url, array('phone' => $number, 'text' => $message, 'smscenter'=> $smscenter));
 	
 }
 

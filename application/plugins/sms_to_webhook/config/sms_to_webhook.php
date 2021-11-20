@@ -7,7 +7,7 @@
 | webhook_url - Webhook URL (Don't use space)
 |
 */
-$config['webhook_url'] = 'https://app.shambaplus.com/api/SMS/text';
+$config['webhook_url'] = 'https://app.shambaplus.com/api/Messages/SMS/text';
 
 /* End of file sms_to_webhook.php */
 /* Location: ./application/plugins/sms_to_webhook/config/sms_to_webhook.php */
