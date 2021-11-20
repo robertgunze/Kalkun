@@ -21,7 +21,7 @@ class Webhook {
         $response = curl_exec($conn);
         curl_close($conn);
 
-        return response;
+        return $response;
     }
 
     private function _params_to_query($params)
