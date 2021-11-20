@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 // Make sure it's run from CLI
 if(php_sapi_name() != 'cli' && !empty($_SERVER['REMOTE_ADDR'])) exit("Access Denied.");	
 
