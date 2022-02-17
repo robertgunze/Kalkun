@@ -91,7 +91,7 @@ function sms_to_webhook($sms)
 	if (strlen($number) > 9) {
 		$response = $CI->webhook->get($webhook_url, ['phone' => urlencode($number), 'text' => urlencode($message), 'smscenter'=> urlencode($smscenter)]);
 		print_r($response);
-		//autoreply($sms, $response);
+		autoreply($sms, $response);
 		$CI->webhook->get("http://localhost/index.php/plugin/rest_api/send_sms?phoneNumber=$number&message=".urlencode($response));	
 	}
 }
