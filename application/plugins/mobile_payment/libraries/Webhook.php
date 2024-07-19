@@ -44,3 +44,5 @@ class Webhook {
 		return substr($query, 0, strlen($query) - 1);;
 	}
 }
+
+?>
