@@ -7,6 +7,10 @@
  */
 class MpesaParser extends PaymentStrategy{
     
+	const MONEY_IN = 1;
+	const MONEY_OUT = 2;
+	const MONEY_NEUTRAL = 3;
+
     const PAYMENT_RECEIVED = 21;
     const PAYMENT_SENT = 22;
     const DEPOSIT = 23;
@@ -52,7 +56,7 @@ class MpesaParser extends PaymentStrategy{
         
         // REFACTOR: should be split into subclasses
 		if (strpos($input, "You have received") > 0) {
-			$result["super_type"] = Transaction::MONEY_IN;
+			$result["super_type"] = self::MONEY_IN;
 			$result["type"] = self::PAYMENT_RECEIVED;
 
 			$temp = array();
@@ -68,7 +72,7 @@ class MpesaParser extends PaymentStrategy{
 			}
 
 		} elseif (preg_match("/sent to .+ for account/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
+			$result["super_type"] = self::MONEY_OUT;
 			$result["type"] = self::PAYBILL_PAID;
 
 			$temp = array();
@@ -83,7 +87,7 @@ class MpesaParser extends PaymentStrategy{
 			}
 
 		} elseif (preg_match("/Tsh[0-9\.\,]+ paid to /", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
+			$result["super_type"] = self::MONEY_OUT;
 			$result["type"] = self::BUY_GOODS;
 
 			$temp = array();
@@ -97,7 +101,7 @@ class MpesaParser extends PaymentStrategy{
 			}
 
 		} elseif (preg_match("/sent to .+ on/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
+			$result["super_type"] = self::MONEY_OUT;
 			$result["type"] = self::PAYMENT_SENT;
 
 			$temp = array();
@@ -112,7 +116,7 @@ class MpesaParser extends PaymentStrategy{
 			}
 
 		} elseif (preg_match("/Give Tsh[0-9\.\,]+ cash to/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_IN;
+			$result["super_type"] = self::MONEY_IN;
 			$result["type"] = self::DEPOSIT;
 			
 			$temp = array();
@@ -126,7 +130,7 @@ class MpesaParser extends PaymentStrategy{
 			}
 
 		} elseif (preg_match("/Withdraw Tsh[0-9\.\,]+ from/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
+			$result["super_type"] = self::MONEY_OUT;
 			$result["type"] = self::WITHDRAW;
 
 			$temp = array();
@@ -140,7 +144,7 @@ class MpesaParser extends PaymentStrategy{
 			}
 
 		} elseif (preg_match("/Tsh[0-9\.\,]+ withdrawn from/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
+			$result["super_type"] = self::MONEY_OUT;
 			$result["type"] = self::WITHDRAW_ATM;
 
 			$temp = array();
@@ -154,7 +158,7 @@ class MpesaParser extends PaymentStrategy{
 			}
 
 		} elseif (preg_match("/You bought Tsh[0-9\.\,]+ of airtime on/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
+			$result["super_type"] = self::MONEY_OUT;
 			$result["type"] = self::AIRTIME_YOU;
 
 			$temp = array();
@@ -168,7 +172,7 @@ class MpesaParser extends PaymentStrategy{
 			}
 
 		} elseif (preg_match("/You bought Tsh[0-9\.\,]+ of airtime for (\d+) on/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
+			$result["super_type"] = self::MONEY_OUT;
 			$result["type"] = self::AIRTIME_OTHER;
 
 			$temp = array();
@@ -182,7 +186,7 @@ class MpesaParser extends PaymentStrategy{
 			}
 
 		} else {
-			$result["super_type"] = Transaction::MONEY_NEUTRAL;
+			$result["super_type"] = self::MONEY_NEUTRAL;
 			$result["type"] = self::UNKNOWN;
 		}
 

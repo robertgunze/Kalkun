@@ -80,7 +80,7 @@ function mobile_payment($sms)
 	$webhook_url = $config['webhook_url'];
 	
     $CI =& get_instance();
-    //$CI->load->model('mobile_payment/mobile_payment_model', 'plugin_model');
+    $CI->load->model('mobile_payment/mobile_payment_model', 'plugin_model');
     $CI->load->library('mobile_payment/webhook', 'webhook');
     
 	//process payment and forward to an end-point
@@ -94,8 +94,10 @@ function mobile_payment($sms)
 			$transactionMapper.input = $message;
 			$transactionData = $transactionMapper.processTransaction();
 			//save transaction data
+			if ($CI->plugin_model->save_transaction($transactionData)) {
+				//TODO: forward to webhook
 
-			//forward to webhook
+			}
 			break;
 		}
 	}
