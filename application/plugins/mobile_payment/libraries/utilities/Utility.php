@@ -1,10 +1,5 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of Utility
  *
@@ -35,13 +30,7 @@ class Utility {
 		}
 		return 0;
 	}
-        
-        public static function sendSystemEmail($from='Pesawallet',$subject,$body)
-        {
-                $headers="From: {$from}\r\nReply-To: noreply";
-	        mail(Yii::app()->params['adminEmail'],$subject,$body,$headers);
-              
-        }
+
 }
 
 ?>
