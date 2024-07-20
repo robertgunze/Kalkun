@@ -60,6 +60,51 @@ class Webhook {
 
 		return substr($query, 0, strlen($query) - 1);;
 	}
+
+	/**
+	 * A method to post to fulfilling service 
+	 * @param string $country
+	 * @param string $processor
+	 * @param object $merchant
+	 * @param string $service
+	 * @param object $payment
+     * @return  object
+	 */
+	public function prepare_post_data ($country, $processor, $merchant, $service, $payment) {
+
+		return array(
+			"requestId" => $payment->id,
+			"service" => $service,
+			"payer" => array(
+				"name" => $payment->name,
+				"account" => $payment->phonenumber,
+				"accountType" => "WALLET",///Can be BANK,WALLET,etc
+				"accountProvider" => $processor, //Name of the Payer Account Provider
+				"country" => $merchant->country_iso_code
+			),
+			"customer" => array(
+				"number" => $payment->phonenumber,
+				"name" => $payment->name,
+				"mobile" => $payment->phonenumber,
+				"institution" => $merchant->name,
+				"category" => "" ///Can be Domestic,industrial,etc bases on type of utility. etc
+			),
+			"payment" => array(
+				"timeStamp" => $payment->time, ////DateTime when the Payment actually happened
+				"referenceNumber": $payment->phonenumber,///Specific Reference Number used during Payment processing. eng. controlNumber,MEter Number or Specific Payment Reference incase it is different from control number modality
+				"receiptNumber" => $payment->receipt,
+				"deviceNumber" => "",//Can be memter number, can be any IOT device Number
+				"amount" => $payment->amount,
+				"currency" => $merchant->currency,
+				"credits" => NULL, ///When this is not set the application eill look for tarrifs from the tarrifs management service or tarrifs details provided
+				"description":"{$service} usage payment for {$payment->phonenumber}"
+			),
+			"tariff" => array(),
+			"callBackUrl" => "",
+			"metaData" => array()
+
+		);
+	}
 }
 
 ?>

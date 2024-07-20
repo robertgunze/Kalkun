@@ -7,7 +7,7 @@
 | webhook_url - Webhook URL (Don't use space)
 |
 */
-$config['webhook_url'] = 'https://nexiot.nexiss.cloud/api/payments?gateway=phone';
+$config['webhook_url'] = 'https://eoz3ayku4lral51.m.pipedream.net';
 
-/* End of file sms_to_webhook.php */
-/* Location: ./application/plugins/sms_to_webhook/config/sms_to_webhook.php */
+/* End of file mobile_payment.php */
+/* Location: ./application/plugins/sms_to_webhook/config/mobile_payment.php */

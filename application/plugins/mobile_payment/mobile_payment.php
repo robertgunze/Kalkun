@@ -72,7 +72,7 @@ function mobile_payment_install()
 function mobile_payment($sms)
 {
 	$config = mobile_payment_initialize();
-	print_r($config);
+	log_message('info',$config);
 	$message = $sms->TextDecoded;
 	$from = $sms->SenderNumber;
     $smscenter = $sms->SMSCNumber;
@@ -86,21 +86,28 @@ function mobile_payment($sms)
     
 	//process payment and forward to an end-point
 	$countryISOCode = $CI->plugin_model->get_country_iso_code();
+	$merchant = $CI->plugin_model->get_merchant();
 
 	foreach (glob("libraries/parsers/{$countryISOCode}_*.php") as $file) {
 		require_once($file);
 
 		$class = basename($file, '.php');
-		$class = substr($class, 3);//remove country code prefix on filename;
+		$processor = $class;
+		$class = substr($class, 3, strlen($class) - 1);//remove country code prefix on filename;
 		if (class_exists($class) && $class::alias == $from) {
 			//$transactionMapper = new TransactionMapper(new $class);
 			$transactionMapper = $CI->txnmapper->set_payment_processor(new $class);
 			$transactionMapper.input = $message;
 			$transactionData = $transactionMapper.processTransaction();
+			$transactionData['merchant_id'] = $merchant->merchant_id;
 			//save transaction data
-			if ($CI->plugin_model->save_transaction($transactionData)) {
-				//TODO: forward to webhook
-
+			if ($transaction_id = $CI->plugin_model->save_transaction($transactionData)) {
+				$service = $merchant->service;
+				$transactionData['id'] = $transaction_id;
+				$payment = (object)$transactionData;
+				$payload = $CI->webhook->prepare_post_data($countryISOCode, $processor, $merchant, $service, $payment);
+				$response = $CI->webhook->post($webhook_url, $payload);
+				log_message('info', $response);
 			}
 			break;
 		}

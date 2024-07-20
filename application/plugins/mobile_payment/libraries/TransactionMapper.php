@@ -33,6 +33,7 @@ class TransactionMapper{
     private function transform($data = array()) {
 
         $transaction = array();
+        $transaction['id'] = 0;
         $transaction['amount'] = $data['amount'];
         $transaction['receipt'] = $data['receipt'];
         $transaction['merchant_id'] = $data['merchant_id'];
