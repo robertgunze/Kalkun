@@ -72,7 +72,7 @@ function mobile_payment_install()
 function mobile_payment($sms)
 {
 	$config = mobile_payment_initialize();
-	log_message('info',$config);
+	log_message('info',var_dump($config));
 	$message = $sms->TextDecoded;
 	$from = $sms->SenderNumber;
     $smscenter = $sms->SMSCNumber;
