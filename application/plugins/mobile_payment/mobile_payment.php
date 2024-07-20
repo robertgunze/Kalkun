@@ -87,6 +87,7 @@ function mobile_payment($sms)
 	//process payment and forward to an end-point
 	$countryISOCode = $CI->plugin_model->get_country_iso_code();
 	$merchant = $CI->plugin_model->get_merchant();
+	log_message('info', "libraries/parsers/{$countryISOCode}_*.php");
 	log_message('info', var_dump(glob("libraries/parsers/{$countryISOCode}_*.php")));
 	foreach (glob("libraries/parsers/{$countryISOCode}_*.php") as $file) {
 		require_once($file);
