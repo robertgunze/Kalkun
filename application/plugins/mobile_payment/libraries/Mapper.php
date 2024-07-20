@@ -19,10 +19,10 @@ class Mapper {
         return $this;
     }
     
-    public function processTransaction(){
+    public function processTransaction($merchant_id = 0){
         $transData = $this->paymentStrategy->parse($this);
         if(!empty($transData)) {
-
+            $transData['merchant_id'] = $merchant_id;
             return $this->transform($transData);
         }
         
