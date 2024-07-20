@@ -102,7 +102,7 @@ function mobile_payment($sms)
 			//$transactionMapper = new Mapper(new $class);
 			$transactionMapper = $CI->mapper->set_payment_processor(new $class);
 			$transactionMapper->input = $message;
-			$transactionData = $transactionMapper.processTransaction();
+			$transactionData = $transactionMapper->processTransaction();
 			$transactionData['merchant_id'] = $merchant->merchant_id;
 			//save transaction data
 			if ($transaction_id = $CI->plugin_model->save_transaction($transactionData)) {
