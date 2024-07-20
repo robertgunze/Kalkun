@@ -10,4 +10,4 @@
 $config['webhook_url'] = 'https://eoz3ayku4lral51.m.pipedream.net';
 
 /* End of file mobile_payment.php */
-/* Location: ./application/plugins/sms_to_webhook/config/mobile_payment.php */
+/* Location: ./application/plugins/mobile_payment/config/mobile_payment.php */

@@ -97,7 +97,7 @@ function mobile_payment($sms)
 		if (class_exists($class) && $class::alias == $from) {
 			//$transactionMapper = new TransactionMapper(new $class);
 			$transactionMapper = $CI->txnmapper->set_payment_processor(new $class);
-			$transactionMapper.input = $message;
+			$transactionMapper->input = $message;
 			$transactionData = $transactionMapper.processTransaction();
 			$transactionData['merchant_id'] = $merchant->merchant_id;
 			//save transaction data
