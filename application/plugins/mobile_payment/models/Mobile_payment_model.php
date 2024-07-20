@@ -33,7 +33,7 @@ class Mobile_payment_model extends CI_Model {
 	
     function save_transaction($data = array())
     {
-        $this->db->set($param);
+        $this->db->set($data);
         $this->db->insert('plugin_mobile_payment_transaction');
         return $this->db->insert_id();
     }
