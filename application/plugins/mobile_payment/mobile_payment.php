@@ -84,6 +84,8 @@ function mobile_payment($sms)
     $CI->load->library('mobile_payment/webhook', 'webhook');
 	$CI->load->library('mobile_payment/TransactionMapper', 'txnmapper');
     
+	log_message('info',var_dump($sms));
+
 	//process payment and forward to an end-point
 	$countryISOCode = $CI->plugin_model->get_country_iso_code();
 	$merchant = $CI->plugin_model->get_merchant();
