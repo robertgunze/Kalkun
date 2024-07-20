@@ -8,7 +8,7 @@
 
 abstract class PaymentStrategy {
     //put your code here
-    abstract function parse(TransactionMapper $transaction);
+    abstract function parse(Mapper $transaction);
     
 }
 
