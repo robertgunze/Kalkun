@@ -14,7 +14,7 @@
 require_once(__DIR__.'/../utilities/Utility.php');
 require_once(__DIR__.'/../Transaction.php');
 require_once(__DIR__.'/../PaymentStrategy.php');
-
+require_once(__DIR__.'/../Mapper.php');
 
 class TigoParser extends PaymentStrategy{
 
@@ -22,7 +22,7 @@ class TigoParser extends PaymentStrategy{
   const countryCode = '+255';
 
     //put your code here
-  public function parse(TransactionMapper $transaction){
+  public function parse(Mapper $transaction){
       //implement code to parse TIGO PESA sms from merchant's phone
       $transData = array(
             'amount_received'=>1000000,

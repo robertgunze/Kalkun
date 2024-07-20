@@ -9,6 +9,7 @@
 require_once(__DIR__.'/../utilities/Utility.php');
 require_once(__DIR__.'/../Transaction.php');
 require_once(__DIR__.'/../PaymentStrategy.php');
+require_once(__DIR__.'/../Mapper.php');
 
 class Airtel extends PaymentStrategy{
 
@@ -16,7 +17,7 @@ class Airtel extends PaymentStrategy{
     const countryCode = '+265';
     
     //put your code here
-    public function parse(TransactionMapper $transaction){
+    public function parse(Mapper $transaction){
         //implement code to parse AIRTEL MONEY sms from merchant's phone
         $input = $mapper->input;
         $result = array(

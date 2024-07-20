@@ -9,7 +9,7 @@
 require_once(__DIR__.'/../utilities/Utility.php');
 require_once(__DIR__.'/../Transaction.php');
 require_once(__DIR__.'/../PaymentStrategy.php');
-
+require_once(__DIR__.'/../Mapper.php');
 
 class Mpesa extends PaymentStrategy{
 
@@ -26,7 +26,7 @@ class Mpesa extends PaymentStrategy{
 		return $dt->getTimestamp();
     }
     
-    public function parse(TransactionMapper $mapper) {
+    public function parse(Mapper $mapper) {
         //implement code to parse M-PESA sms from merchant's phone
         
         $input = $mapper->input;
