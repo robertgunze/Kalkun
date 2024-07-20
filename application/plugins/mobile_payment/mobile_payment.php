@@ -107,7 +107,7 @@ function mobile_payment($sms)
 				$payment = (object)$transactionData;
 				$payload = $CI->webhook->prepare_post_data($countryISOCode, $processor, $merchant, $service, $payment);
 				$response = $CI->webhook->post($webhook_url, $payload);
-				log_message('info', $response);
+				log_message('info', var_dump($response));
 			}
 			break;
 		}
