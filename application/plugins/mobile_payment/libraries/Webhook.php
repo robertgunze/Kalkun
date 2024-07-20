@@ -97,7 +97,7 @@ class Webhook {
 				"amount" => $payment->amount,
 				"currency" => $merchant->currency,
 				"credits" => NULL, ///When this is not set the application eill look for tarrifs from the tarrifs management service or tarrifs details provided
-				"description":"{$service} usage payment for {$payment->phonenumber}"
+				"description" => "{$service} usage payment for {$payment->phonenumber}"
 			),
 			"tariff" => array(),
 			"callBackUrl" => "",
