@@ -10,8 +10,8 @@ class TransactionMapper{
     private $paymentStrategy;
     public $input='';
     
-    function __construct(PaymentStrategy $paymentStrategy){
-        $this->paymentStrategy = $paymentStrategy;
+    function __construct(/*PaymentStrategy $paymentStrategy*/){
+        //$this->paymentStrategy = $paymentStrategy;
     }
 
     public function set_payment_processor(PaymentStrategy $strategy) {
