@@ -7,25 +7,30 @@
  */
 class TransactionMapper{
         
-        private $paymentStrategy;
-        public $input='';
-        
-        function __construct(PaymentStrategy $paymentStrategy){
-            $this->paymentStrategy = $paymentStrategy;
-        }
+    private $paymentStrategy;
+    public $input='';
     
-     public function processTransaction(){
-            $transData = $this->paymentStrategy->parse($this);
-            if(!empty($transData)) {
+    function __construct(PaymentStrategy $paymentStrategy){
+        $this->paymentStrategy = $paymentStrategy;
+    }
 
-                return $this->transform($transData);
-            }
-            
-            return false;
-            
-     }
+    public function set_payment_processor(PaymentStrategy $strategy) {
+        $this->paymentStrategy = $strategy;
+        return $this;
+    }
+    
+    public function processTransaction(){
+        $transData = $this->paymentStrategy->parse($this);
+        if(!empty($transData)) {
 
-     private function transform($data = array()) {
+            return $this->transform($transData);
+        }
+        
+        return false;
+            
+    }
+
+    private function transform($data = array()) {
 
         $transaction = array();
         $transaction['amount'] = $data['amount'];
@@ -43,7 +48,7 @@ class TransactionMapper{
 
         return $transaction;
 
-     }
+    }
      
      
     
