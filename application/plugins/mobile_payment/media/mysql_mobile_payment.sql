@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `plugin_mobile_payment_merchant` (
   `password` varchar(255) NOT NULL,
   `api_key` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
-  `countryCode` varchar(5) NOT NULL
+  `country_iso_code` varchar(5) NOT NULL
   PRIMARY KEY (`merchant_id`)
 ) ENGINE = MYISAM;
 

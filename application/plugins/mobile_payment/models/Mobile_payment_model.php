@@ -21,7 +21,8 @@ class Mobile_payment_model extends CI_Model {
      */
     function get_country_iso_code() {
         $this->db->from('plugin_mobile_payment_merchant');
-        return $this->db->result();
+        $result = $this->db->get()->row();
+        return $result->country_iso_code;
     }
 	
     function save_transaction($data = array())

@@ -84,11 +84,13 @@ function mobile_payment($sms)
     $CI->load->library('mobile_payment/webhook', 'webhook');
     
 	//process payment and forward to an end-point
+	$countryISOCode = $CI->plugin_model->get_country_iso_code();
 
-	foreach (glob('libraries/*.php') as $file) {
+	foreach (glob("libraries/parsers/{$countryISOCode}_*.php") as $file) {
 		require_once($file);
 
 		$class = basename($file, '.php');
+		$class = substr($class, 3);//remove country code prefix on filename;
 		if (class_exists($class) && $class::alias == $from) {//TODO: use SIM card number country code to avoid alias collisions
 			$transactionMapper = new TransactionMapper(new $class);
 			$transactionMapper.input = $message;
