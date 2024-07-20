@@ -82,7 +82,7 @@ function mobile_payment($sms)
     $CI =& get_instance();
     $CI->load->model('mobile_payment/mobile_payment_model', 'plugin_model');
     $CI->load->library('mobile_payment/webhook', 'webhook');
-	$CI->load->library('mobile_payment/TransactionMapper', 'transactionMapper');
+	$CI->load->library('mobile_payment/mapper', 'mapper');
     
 	log_message('info',var_dump($sms));
 
@@ -99,8 +99,8 @@ function mobile_payment($sms)
 		$class = substr($class, 3, strlen($class) - 1);//remove country code prefix on filename;
 		log_message('info',$class);
 		if (class_exists($class) && $class::alias == $from) {
-			//$transactionMapper = new TransactionMapper(new $class);
-			$transactionMapper = $CI->transactionMapper->set_payment_processor(new $class);
+			//$transactionMapper = new Mapper(new $class);
+			$transactionMapper = $CI->mapper->set_payment_processor(new $class);
 			$transactionMapper->input = $message;
 			$transactionData = $transactionMapper.processTransaction();
 			$transactionData['merchant_id'] = $merchant->merchant_id;

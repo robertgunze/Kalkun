@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Description of TransactionMapper
+ * Description of Mapper
  *
  * @author robertgunze
  */
-class TransactionMapper{
+class Mapper {
         
     private $paymentStrategy;
     public $input='';
