@@ -5,7 +5,7 @@
  *
  */
 class Mobile_payment_model extends CI_Model {
-    
+
 	const STATUS_COMPLETED = 1;
 	const STATUS_DECLINED = 2;
 	const STATUS_CANCELLED = 3;
@@ -15,6 +15,14 @@ class Mobile_payment_model extends CI_Model {
 	{
 		parent::__construct();
 	}
+
+    /**
+     * Retrieve country ISO code e.g TZ, KE, NG etc...
+     */
+    function get_country_iso_code() {
+        $this->db->from('plugin_mobile_payment_merchant');
+        return $this->db->result();
+    }
 	
     function save_transaction($data = array())
     {

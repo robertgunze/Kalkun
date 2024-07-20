@@ -5,6 +5,11 @@
  *
  * @author robert
  */
+
+require_once(__DIR__.'/../utilities/Utility.php');
+require_once(__DIR__.'/../Transaction.php');
+require_once(__DIR__.'/../PaymentStrategy.php');
+
 class Tnm extends PaymentStrategy{
 
     const alias = 'TNM';

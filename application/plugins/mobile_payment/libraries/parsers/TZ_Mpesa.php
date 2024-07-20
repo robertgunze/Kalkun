@@ -1,18 +1,34 @@
 <?php
 
 /**
- * Description of AirtelParser
+ * Description of MpesaParser
  *
  * @author robert
  */
-class Airtel extends PaymentStrategy{
 
-    const alias = 'Airtel';
-    const countryCode = '+265';
+require_once(__DIR__.'/../utilities/Utility.php');
+require_once(__DIR__.'/../Transaction.php');
+require_once(__DIR__.'/../PaymentStrategy.php');
+
+
+class Mpesa extends PaymentStrategy{
+
+	const alias = 'M-PESA';
+    const countryCode = '+255';
     
-    //put your code here
-    public function parse(TransactionMapper $transaction){
-        //implement code to parse AIRTEL MONEY sms from merchant's phone
+    
+    function __construct() {
+       
+    }
+    
+    public function dateInput($time) {
+		$dt = \DateTime::createFromFormat("j/n/y h:i A", $time);
+		return $dt->getTimestamp();
+    }
+    
+    public function parse(TransactionMapper $mapper) {
+        //implement code to parse M-PESA sms from merchant's phone
+        
         $input = $mapper->input;
         $result = array(
                             "super_type" => 0,
@@ -32,7 +48,7 @@ class Airtel extends PaymentStrategy{
         // REFACTOR: should be split into subclasses
 		if (strpos($input, "You have received") > 0) {
 			$result["super_type"] = Transaction::MONEY_IN;
-			$result["type"] = self::PAYMENT_RECEIVED;
+			$result["type"] = Transaction::PAYMENT_RECEIVED;
 
 			$temp = array();
 			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+You have received Tsh([0-9\.\,]+) from[\s\n]+([A-Z ]+) +on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
@@ -48,7 +64,7 @@ class Airtel extends PaymentStrategy{
 
 		} elseif (preg_match("/sent to .+ for account/", $input) > 0) {
 			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::PAYBILL_PAID;
+			$result["type"] = Transaction::PAYBILL_PAID;
 
 			$temp = array();
 			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+Tsh([0-9\.\,]+) sent to[\s\n]+(.+)[\s\n]+for account (.+)[\s\n]+on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
@@ -63,7 +79,7 @@ class Airtel extends PaymentStrategy{
 
 		} elseif (preg_match("/Tsh[0-9\.\,]+ paid to /", $input) > 0) {
 			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::BUY_GOODS;
+			$result["type"] = Transaction::BUY_GOODS;
 
 			$temp = array();
 			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+Tsh([0-9\.\,]+) paid to[\s\n]+([.]+)[\s\n]+on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
@@ -77,7 +93,7 @@ class Airtel extends PaymentStrategy{
 
 		} elseif (preg_match("/sent to .+ on/", $input) > 0) {
 			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::PAYMENT_SENT;
+			$result["type"] = Transaction::PAYMENT_SENT;
 
 			$temp = array();
 			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+Tsh([0-9\.\,]+) sent to ([A-Z ]+) ([0-9]+) on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
@@ -92,7 +108,7 @@ class Airtel extends PaymentStrategy{
 
 		} elseif (preg_match("/Give Tsh[0-9\.\,]+ cash to/", $input) > 0) {
 			$result["super_type"] = Transaction::MONEY_IN;
-			$result["type"] = self::DEPOSIT;
+			$result["type"] = Transaction::DEPOSIT;
 			
 			$temp = array();
 			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+Give Tsh([0-9\.\,]+) cash to (.+)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
@@ -106,7 +122,7 @@ class Airtel extends PaymentStrategy{
 
 		} elseif (preg_match("/Withdraw Tsh[0-9\.\,]+ from/", $input) > 0) {
 			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::WITHDRAW;
+			$result["type"] = Transaction::WITHDRAW;
 
 			$temp = array();
 			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+Withdraw Tsh([0-9\.\,]+) from (.+)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
@@ -120,7 +136,7 @@ class Airtel extends PaymentStrategy{
 
 		} elseif (preg_match("/Tsh[0-9\.\,]+ withdrawn from/", $input) > 0) {
 			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::WITHDRAW_ATM;
+			$result["type"] = Transaction::WITHDRAW_ATM;
 
 			$temp = array();
 			preg_match_all("/([A-Z0-9]+) Confirmed[\s\n]+on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M).[\s\n]+Tsh([0-9\.\,]+) withdrawn from (\d+) - AGENT ATM\.[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
@@ -134,7 +150,7 @@ class Airtel extends PaymentStrategy{
 
 		} elseif (preg_match("/You bought Tsh[0-9\.\,]+ of airtime on/", $input) > 0) {
 			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::AIRTIME_YOU;
+			$result["type"] = Transaction::AIRTIME_YOU;
 
 			$temp = array();
 			preg_match_all("/([A-Z0-9]+) confirmed\.[\s\n]+You bought Tsh([0-9\.\,]+) of airtime on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
@@ -148,7 +164,7 @@ class Airtel extends PaymentStrategy{
 
 		} elseif (preg_match("/You bought Tsh[0-9\.\,]+ of airtime for (\d+) on/", $input) > 0) {
 			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::AIRTIME_OTHER;
+			$result["type"] = Transaction::AIRTIME_OTHER;
 
 			$temp = array();
 			preg_match_all("/([A-Z0-9]+) confirmed\.[\s\n]+You bought Tsh([0-9\.\,]+) of airtime for (\d+) on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
@@ -162,11 +178,12 @@ class Airtel extends PaymentStrategy{
 
 		} else {
 			$result["super_type"] = Transaction::MONEY_NEUTRAL;
-			$result["type"] = self::UNKNOWN;
+			$result["type"] = Transaction::UNKNOWN;
 		}
 
 		return $result;
-    } 
+        
+    }
 }
 
 ?>
