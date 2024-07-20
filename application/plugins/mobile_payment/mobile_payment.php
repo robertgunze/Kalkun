@@ -87,13 +87,14 @@ function mobile_payment($sms)
 	//process payment and forward to an end-point
 	$countryISOCode = $CI->plugin_model->get_country_iso_code();
 	$merchant = $CI->plugin_model->get_merchant();
-
+	log_message('info', var_dump(glob("libraries/parsers/{$countryISOCode}_*.php")));
 	foreach (glob("libraries/parsers/{$countryISOCode}_*.php") as $file) {
 		require_once($file);
 
 		$class = basename($file, '.php');
 		$processor = $class;
 		$class = substr($class, 3, strlen($class) - 1);//remove country code prefix on filename;
+		log_message('info',$class);
 		if (class_exists($class) && $class::alias == $from) {
 			//$transactionMapper = new TransactionMapper(new $class);
 			$transactionMapper = $CI->txnmapper->set_payment_processor(new $class);
