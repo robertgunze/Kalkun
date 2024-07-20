@@ -90,8 +90,8 @@ function mobile_payment($sms)
 	$countryISOCode = $CI->plugin_model->get_country_iso_code();
 	$merchant = $CI->plugin_model->get_merchant();
 	log_message('info', var_dump("libraries/parsers/{$countryISOCode}_*.php"));
-	log_message('info', var_dump(glob("libraries/parsers/{$countryISOCode}_*.php")));
-	foreach (glob("libraries/parsers/{$countryISOCode}_*.php") as $file) {
+	log_message('info', var_dump(glob(APPPATH."plugins/mobile_payment/libraries/parsers/{$countryISOCode}_*.php")));
+	foreach (glob(APPPATH."plugins/mobile_payment/libraries/parsers/{$countryISOCode}_*.php") as $file) {
 		require_once($file);
 
 		$class = basename($file, '.php');
