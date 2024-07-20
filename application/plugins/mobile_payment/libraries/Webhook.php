@@ -27,6 +27,23 @@ class Webhook {
         return $response;
     }
 
+	public function post ($url, $data = array()) {
+		$conn = curl_init();
+
+        $payload = json_encode($data);
+
+		curl_setopt($conn, CURLOPT_URL, $url);
+		curl_setopt($conn, CURLOPT_POST, 1);
+		curl_setopt($conn, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($conn, CURLOPT_RETURNTRANSFER, 1); 
+		curl_setopt($conn, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+        $response = curl_exec($conn);
+        curl_close($conn);
+
+        return $response;
+	}
+
     private function _params_to_query($params)
 	{
 		if ( !is_array($params) || empty($params) )
