@@ -91,7 +91,7 @@ class Webhook {
 			),
 			"payment" => array(
 				"timeStamp" => $payment->time, ////DateTime when the Payment actually happened
-				"referenceNumber": $payment->phonenumber,///Specific Reference Number used during Payment processing. eng. controlNumber,MEter Number or Specific Payment Reference incase it is different from control number modality
+				"referenceNumber" => $payment->phonenumber,///Specific Reference Number used during Payment processing. eng. controlNumber,MEter Number or Specific Payment Reference incase it is different from control number modality
 				"receiptNumber" => $payment->receipt,
 				"deviceNumber" => "",//Can be memter number, can be any IOT device Number
 				"amount" => $payment->amount,
