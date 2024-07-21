@@ -52,7 +52,7 @@ class Airtel extends PaymentStrategy{
 				$result["amount"] = Utility::numberInput($amount_received);
 				$result["name"] = $sender_name;
 				$result["phone"] = $sender_number;
-				$result["time"] = $this->dateInput(date('Y-m-d H:i:s'));
+				$result["time"] = strtotime(date("Y-m-d H:i:s"));
 				$result["balance"] = Utility::numberInput($new_balance);
 			}
 
