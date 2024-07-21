@@ -50,7 +50,8 @@ class Tnm extends PaymentStrategy{
 				list($full_match, $sender_number, $sender_name, $date, $time, $amount, $fee, $reference, $balance) = $matches;
 
 				$result["receipt"] = $reference;
-				$result["amount"] = Utility::numberInput($amount);
+				//$result["amount"] = Utility::numberInput($amount);
+				$result["amount"] = floatval($amount);
 				$result["name"] = $sender_name;
 				$result["phone"] = $sender_number;
 				//$result["time"] = strtotime(date("Y-m-d H:i:s"));
