@@ -91,20 +91,23 @@ function mobile_payment($sms)
 	$merchant = $CI->plugin_model->get_merchant();
 	//log_message('info', var_dump("libraries/parsers/{$countryISOCode}_*.php"));
 	//log_message('info', var_dump(glob(APPPATH."plugins/mobile_payment/libraries/parsers/{$countryISOCode}_*.php")));
-	foreach (glob(APPPATH."plugins/mobile_payment/libraries/parsers/{$countryISOCode}_*.php") as $file) {
+	$files = glob(APPPATH."plugins/mobile_payment/libraries/parsers/{$countryISOCode}_*.php");
+	foreach ($files as $file) {
 		require_once($file);
 
 		$class = basename($file, '.php');
 		$processor = $class;
 		$class = substr($class, 3, strlen($class) - 1);//remove country code prefix on filename;
-		log_message('info',$class);
+		
 		if (class_exists($class) && $class::alias == $from) {
 			//$transactionMapper = new Mapper(new $class);
+			echo "parser_class: " . var_export($class, false) . " alias: ".$class::alias . " from: ".$from.  "<br>";
 			$transactionMapper = $CI->mapper->set_payment_processor(new $class);
 			$transactionMapper->input = $message;
 			$transactionData = $transactionMapper->processTransaction($merchant->merchant_id);
 			$transactionData['merchant_id'] = $merchant->merchant_id;
-			if ($transactionData['super_type'] !== Transaction::MONEY_IN) break;
+			echo "transactionData: " . var_export($transactionData, false) . "<br>";
+			if ($transactionData['super_type'] !== Transaction::MONEY_IN) continue;
 			//save transaction data
 			if ($transaction_id = $CI->plugin_model->save_transaction($transactionData)) {
 				$service = $merchant->service;
@@ -114,7 +117,6 @@ function mobile_payment($sms)
 				$response = $CI->webhook->post($webhook_url, $payload);
 				log_message('info', var_dump($response));
 			}
-			break;
 		}
 	}
 }
