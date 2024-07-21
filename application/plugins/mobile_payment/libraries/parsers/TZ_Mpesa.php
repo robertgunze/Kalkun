@@ -56,7 +56,7 @@ class Mpesa extends PaymentStrategy{
 
 				$result["receipt"] = $transaction_id;
 				//$result["amount"] = Utility::numberInput($amount_received);
-				$result["amount"] = floatval($amount_received);
+				$result["amount"] =  floatval(str_replace(',',$amount_received));
 				$result["phone"] = $sender_number;
 				$result["name"] = $sender_name;
 				//$result["time"] = $this->dateInput($date . " " . $time);

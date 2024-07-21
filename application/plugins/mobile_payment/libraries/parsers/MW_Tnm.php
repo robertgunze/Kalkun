@@ -51,7 +51,7 @@ class Tnm extends PaymentStrategy{
 
 				$result["receipt"] = $reference;
 				//$result["amount"] = Utility::numberInput($amount);
-				$result["amount"] = floatval($amount);
+				$result["amount"] = floatval(str_replace(',',$amount));
 				$result["name"] = $sender_name;
 				$result["phone"] = $sender_number;
 				//$result["time"] = strtotime(date("Y-m-d H:i:s"));

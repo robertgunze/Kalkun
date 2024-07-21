@@ -50,7 +50,7 @@ class Airtel extends PaymentStrategy{
 				list($full_match, $transaction_id, $amount_received, $sender_number, $sender_name, $new_balance) = $matches;
 				$result["receipt"] = $transaction_id;
 				//$result["amount"] = Utility::numberInput($amount_received);
-				$result["amount"] = floatval($amount_received);
+				$result["amount"] = floatval(str_replace(',',$amount_received));
 				$result["name"] = $sender_name;
 				$result["phone"] = $sender_number;
 				//$result["time"] = strtotime(date("Y-m-d H:i:s"));
