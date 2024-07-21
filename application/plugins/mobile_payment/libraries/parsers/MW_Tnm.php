@@ -40,7 +40,7 @@ class Tnm extends PaymentStrategy{
                             "costs" => 0
                      );
         
-		if (strpos($input, "Cash In") > 0) {
+		if (strpos($input, "Cash In") >= 0) {
 			$result["super_type"] = Transaction::MONEY_IN;
 			$result["type"] = Transaction::PAYMENT_RECEIVED;
 
