@@ -46,7 +46,7 @@ class Airtel extends PaymentStrategy{
 			$result["type"] = Transaction::PAYMENT_RECEIVED;
 
 			$regex = '/Trans\.ID\s*:\s*([A-Z0-9\.]+)\.\s*Dear customer, you have received MK\s*([\d\.]+)\s*from\s*([\d]+),\s*([A-Z ]+)\s*.\s*Your balance is MK\s*([\d\.]+)\./';
-			if (preg_match($regex, $$input, $matches)) {
+			if (preg_match($regex, $input, $matches)) {
 				list($full_match, $transaction_id, $amount_received, $sender_number, $sender_name, $new_balance) = $matches;
 				$result["receipt"] = $transaction_id;
 				$result["amount"] = Utility::numberInput($amount_received);
