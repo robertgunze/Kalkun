@@ -83,7 +83,7 @@ function mobile_payment($sms)
     $CI->load->model('mobile_payment/mobile_payment_model', 'plugin_model');
     $CI->load->library('mobile_payment/webhook', 'webhook');
 	$CI->load->library('mobile_payment/mapper', 'mapper');
-    
+    require_once(APPPATH."plugins/mobile_payment/libraries/Transaction.php");
 	log_message('info',var_dump($sms));
 
 	//process payment and forward to an end-point
@@ -104,6 +104,7 @@ function mobile_payment($sms)
 			$transactionMapper->input = $message;
 			$transactionData = $transactionMapper->processTransaction($merchant->merchant_id);
 			$transactionData['merchant_id'] = $merchant->merchant_id;
+			if ($transactionData['super_type'] !== Transaction::MONEY_IN) break;
 			//save transaction data
 			if ($transaction_id = $CI->plugin_model->save_transaction($transactionData)) {
 				$service = $merchant->service;
