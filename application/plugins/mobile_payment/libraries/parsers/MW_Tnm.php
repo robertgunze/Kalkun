@@ -42,7 +42,7 @@ class Tnm extends PaymentStrategy{
         
 		if (strpos($input, "Cash In") > 0) {
 			$result["super_type"] = Transaction::MONEY_IN;
-			$result["type"] = self::PAYMENT_RECEIVED;
+			$result["type"] = Transaction::PAYMENT_RECEIVED;
 
 			$regex = '/Cash In from (\d+)-([A-Z ]+) on (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}:\d{2})\.\s*Amt:\s*([\d,]+\.?\d*)MWK\s*Fee:\s*([\d,]+\.?\d*)MWK\s*Ref:\s*([A-Z0-9]+)\s*Bal:\s*([\d,]+\.?\d*)MWK/';
 
