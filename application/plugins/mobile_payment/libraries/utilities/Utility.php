@@ -20,7 +20,7 @@ class Utility {
 		} else {
 			$amount = (int)$input;
 		}
-		return $amount;
+		return floatvar($amount/100);
 	}
 
 	public static function dateInput($input) {

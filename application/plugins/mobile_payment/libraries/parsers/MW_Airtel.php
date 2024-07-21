@@ -49,14 +49,14 @@ class Airtel extends PaymentStrategy{
 			if (preg_match($regex, $input, $matches)) {
 				list($full_match, $transaction_id, $amount_received, $sender_number, $sender_name, $new_balance) = $matches;
 				$result["receipt"] = $transaction_id;
-				//$result["amount"] = Utility::numberInput($amount_received);
-				$result["amount"] = floatval(str_replace(',',$amount_received));
+				$result["amount"] = Utility::numberInput($amount_received);
+				//$result["amount"] = floatval(str_replace(',',$amount_received));
 				$result["name"] = $sender_name;
 				$result["phone"] = $sender_number;
 				//$result["time"] = strtotime(date("Y-m-d H:i:s"));
 				$result["time"] = date("Y-m-d H:i:s");
-				//$result["balance"] = Utility::numberInput($new_balance);
-				$result["balance"] = floatval(str_replace(',',$new_balance));
+				$result["balance"] = Utility::numberInput($new_balance);
+				//$result["balance"] = floatval(str_replace(',',$new_balance));
 			}
 
 		}  else {

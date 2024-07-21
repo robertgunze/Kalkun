@@ -55,14 +55,14 @@ class Mpesa extends PaymentStrategy{
 				list($full_match, $transaction_id, $amount_received, $sender_number, $sender_name, $date, $time, $new_balance) = $matches;
 
 				$result["receipt"] = $transaction_id;
-				//$result["amount"] = Utility::numberInput($amount_received);
-				$result["amount"] =  floatval(str_replace(',',$amount_received));
+				$result["amount"] = Utility::numberInput($amount_received);
+				//$result["amount"] =  floatval(str_replace(',',$amount_received));
 				$result["phone"] = $sender_number;
 				$result["name"] = $sender_name;
 				//$result["time"] = $this->dateInput($date . " " . $time);
 				$result["time"] = date("Y-m-d H:i:s");
-				//$result["balance"] = Utility::numberInput($new_balance);
-				$result["balance"] = floatval(str_replace(',',$new_balance));
+				$result["balance"] = Utility::numberInput($new_balance);
+				//$result["balance"] = floatval(str_replace(',',$new_balance));
 			} 
 
 		} elseif (preg_match("/sent to .+ for account/", $input) > 0) {
