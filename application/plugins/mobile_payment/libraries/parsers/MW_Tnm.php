@@ -47,7 +47,7 @@ class Tnm extends PaymentStrategy{
 			$regex = '/Cash In from (\d+)-([A-Z ]+) on (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}:\d{2})\.\s*Amt:\s*([\d,]+\.?\d*)MWK\s*Fee:\s*([\d,]+\.?\d*)MWK\s*Ref:\s*([A-Z0-9]+)\s*Bal:\s*([\d,]+\.?\d*)MWK/';
 
 			if (preg_match($regex, $input, $matches)) {
-				list($full_match, $sender_number, $sender_name, $date, $time, $amount, $fee, $reference, $balance) = $matches;
+				list($full_match, $sender_number, $sender_name, $date, $time, $amount, $fee, $reference, $new_balance) = $matches;
 
 				$result["receipt"] = $reference;
 				//$result["amount"] = Utility::numberInput($amount);
@@ -56,7 +56,8 @@ class Tnm extends PaymentStrategy{
 				$result["phone"] = $sender_number;
 				//$result["time"] = strtotime(date("Y-m-d H:i:s"));
 				$result["time"] = date("Y-m-d H:i:s");
-				$result["balance"] = Utility::numberInput($balance);
+				//$result["balance"] = Utility::numberInput($new_balance);
+				$result["balance"] = floatval(str_replace(',',$new_balance));
 			}
 		
 		} else {

@@ -55,7 +55,8 @@ class Airtel extends PaymentStrategy{
 				$result["phone"] = $sender_number;
 				//$result["time"] = strtotime(date("Y-m-d H:i:s"));
 				$result["time"] = date("Y-m-d H:i:s");
-				$result["balance"] = Utility::numberInput($new_balance);
+				//$result["balance"] = Utility::numberInput($new_balance);
+				$result["balance"] = floatval(str_replace(',',$new_balance));
 			}
 
 		}  else {
