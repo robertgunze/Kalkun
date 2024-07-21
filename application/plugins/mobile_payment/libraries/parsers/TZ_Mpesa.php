@@ -39,8 +39,8 @@ class Mpesa extends PaymentStrategy{
                             "name" => "",
                             "account" => "",
                             "status" => "",
-                            "amount" => 0,
-                            "balance" => 0,
+                            "amount" => 0.00,
+                            "balance" => 0.00,
                             "note" => "",
                             "costs" => 0
                      );
