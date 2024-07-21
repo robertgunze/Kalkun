@@ -15,6 +15,11 @@ class Tnm extends PaymentStrategy{
 
     const alias = 'TNM';
     const countryCode = '+265';
+
+	public function dateInput($time) {
+		$dt = \DateTime::createFromFormat("j/n/y h:i A", $time);
+		return $dt->getTimestamp();
+    }
     
     //put your code here
     public function parse(Mapper $transaction){
@@ -35,137 +40,23 @@ class Tnm extends PaymentStrategy{
                             "costs" => 0
                      );
         
-        // REFACTOR: should be split into subclasses
-		if (strpos($input, "You have received") > 0) {
+		if (strpos($input, "Cash In") > 0) {
 			$result["super_type"] = Transaction::MONEY_IN;
 			$result["type"] = self::PAYMENT_RECEIVED;
 
-			$temp = array();
-			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+You have received Tsh([0-9\.\,]+) from[\s\n]+([A-Z ]+) +on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			//print_r($temp[1][0]);die;
-                        if (isset($temp[1][0])) {
-				$result["receipt"] = $temp[1][0];
-				$result["amount"] = Utility::numberInput($temp[2][0]);
-				$result["name"] = $temp[3][0];
-				//$result["phone"] = $temp[4][0];
-				$result["time"] = $this->dateInput($temp[4][0] . " " . $temp[5][0]);
-				$result["balance"] = Utility::numberInput($temp[6][0]);
+			$regex = '/Cash In from (\d+)-([A-Z ]+) on (\d{2}\/\d{2}\/\d{4}) (\d{2}:\d{2}:\d{2})\.\s*Amt:\s*([\d,]+\.?\d*)MWK\s*Fee:\s*([\d,]+\.?\d*)MWK\s*Ref:\s*([A-Z0-9]+)\s*Bal:\s*([\d,]+\.?\d*)MWK/';
+
+			if (preg_match($regex, $input, $matches)) {
+				list($full_match, $sender_number, $sender_name, $date, $time, $amount, $fee, $reference, $balance) = $matches;
+
+				$result["receipt"] = $reference;
+				$result["amount"] = Utility::numberInput($amount);
+				$result["name"] = $sender_name;
+				$result["phone"] = $sender_number;
+				$result["time"] = $this->dateInput($date . " " .$time);
+				$result["balance"] = Utility::numberInput($balance);
 			}
-
-		} elseif (preg_match("/sent to .+ for account/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::PAYBILL_PAID;
-
-			$temp = array();
-			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+Tsh([0-9\.\,]+) sent to[\s\n]+(.+)[\s\n]+for account (.+)[\s\n]+on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			if (isset($temp[1][0])) {
-				$result["receipt"] = $temp[1][0];
-				$result["amount"] = Utility::numberInput($temp[2][0]);
-				$result["name"] = $temp[3][0];
-				$result["account"] = $temp[4][0];
-				$result["time"] = $this->dateInput($temp[5][0] . " " . $temp[6][0]);
-				$result["balance"] = Utility::numberInput($temp[7][0]);
-			}
-
-		} elseif (preg_match("/Tsh[0-9\.\,]+ paid to /", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::BUY_GOODS;
-
-			$temp = array();
-			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+Tsh([0-9\.\,]+) paid to[\s\n]+([.]+)[\s\n]+on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			if (isset($temp[1][0])) {
-				$result["receipt"] = $temp[1][0];
-				$result["amount"] = Utility::numberInput($temp[2][0]);
-				$result["name"] = $temp[3][0];
-				$result["time"] = $this->dateInput($temp[4][0] . " " . $temp[5][0]);
-				$result["balance"] = Utility::numberInput($temp[6][0]);
-			}
-
-		} elseif (preg_match("/sent to .+ on/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::PAYMENT_SENT;
-
-			$temp = array();
-			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+Tsh([0-9\.\,]+) sent to ([A-Z ]+) ([0-9]+) on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			if (isset($temp[1][0])) {
-				$result["receipt"] = $temp[1][0];
-				$result["amount"] = Utility::numberInput($temp[2][0]);
-				$result["name"] = $temp[3][0];
-				$result["phone"] = $temp[4][0];
-				$result["time"] = $this->dateInput($temp[5][0] . " " . $temp[6][0]);
-				$result["balance"] = Utility::numberInput($temp[7][0]);
-			}
-
-		} elseif (preg_match("/Give Tsh[0-9\.\,]+ cash to/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_IN;
-			$result["type"] = self::DEPOSIT;
-			
-			$temp = array();
-			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+Give Tsh([0-9\.\,]+) cash to (.+)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			if (isset($temp[1][0])) {
-				$result["receipt"] = $temp[1][0];
-				$result["amount"] = Utility::numberInput($temp[4][0]);
-				$result["name"] = $temp[5][0];
-				$result["time"] = $this->dateInput($temp[2][0] . " " . $temp[3][0]);
-				$result["balance"] = Utility::numberInput($temp[6][0]);
-			}
-
-		} elseif (preg_match("/Withdraw Tsh[0-9\.\,]+ from/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::WITHDRAW;
-
-			$temp = array();
-			preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+Withdraw Tsh([0-9\.\,]+) from (.+)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			if (isset($temp[1][0])) {
-				$result["receipt"] = $temp[1][0];
-				$result["amount"] = Utility::numberInput($temp[4][0]);
-				$result["name"] = $temp[5][0];
-				$result["time"] = $this->dateInput($temp[2][0] . " " . $temp[3][0]);
-				$result["balance"] = Utility::numberInput($temp[6][0]);
-			}
-
-		} elseif (preg_match("/Tsh[0-9\.\,]+ withdrawn from/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::WITHDRAW_ATM;
-
-			$temp = array();
-			preg_match_all("/([A-Z0-9]+) Confirmed[\s\n]+on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M).[\s\n]+Tsh([0-9\.\,]+) withdrawn from (\d+) - AGENT ATM\.[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			if (isset($temp[1][0])) {
-				$result["receipt"] = $temp[1][0];
-				$result["amount"] = Utility::numberInput($temp[4][0]);
-				$result["name"] = $temp[5][0];
-				$result["time"] = $this->dateInput($temp[2][0] . " " . $temp[3][0]);
-				$result["balance"] = Utility::numberInput($temp[6][0]);
-			}
-
-		} elseif (preg_match("/You bought Tsh[0-9\.\,]+ of airtime on/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::AIRTIME_YOU;
-
-			$temp = array();
-			preg_match_all("/([A-Z0-9]+) confirmed\.[\s\n]+You bought Tsh([0-9\.\,]+) of airtime on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			if (isset($temp[1][0])) {
-				$result["receipt"] = $temp[1][0];
-				$result["amount"] = Utility::numberInput($temp[2][0]);
-				$result["name"] = "Vodacom";
-				$result["time"] = $this->dateInput($temp[3][0] . " " . $temp[4][0]);
-				$result["balance"] = Utility::numberInput($temp[5][0]);
-			}
-
-		} elseif (preg_match("/You bought Tsh[0-9\.\,]+ of airtime for (\d+) on/", $input) > 0) {
-			$result["super_type"] = Transaction::MONEY_OUT;
-			$result["type"] = self::AIRTIME_OTHER;
-
-			$temp = array();
-			preg_match_all("/([A-Z0-9]+) confirmed\.[\s\n]+You bought Tsh([0-9\.\,]+) of airtime for (\d+) on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			if (isset($temp[1][0])) {
-				$result["receipt"] = $temp[1][0];
-				$result["amount"] = Utility::numberInput($temp[2][0]);
-				$result["name"] = $temp[3][0];
-				$result["time"] = $this->dateInput($temp[4][0] . " " . $temp[5][0]);
-				$result["balance"] = Utility::numberInput($temp[6][0]);
-			}
-
+		
 		} else {
 			$result["super_type"] = Transaction::MONEY_NEUTRAL;
 			$result["type"] = self::UNKNOWN;
