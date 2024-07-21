@@ -55,7 +55,7 @@ class Mpesa extends PaymentStrategy{
 				list($full_match, $transaction_id, $amount_received, $sender_number, $sender_name, $date, $time, $new_balance) = $matches;
 
 				$result["receipt"] = $transaction_id;
-				$result["amount"] = Utility::numberInput($amount_received);
+				//$result["amount"] = Utility::numberInput($amount_received);
 				$result["amount"] = floatval($amount_received);
 				$result["phone"] = $sender_number;
 				$result["name"] = $sender_name;
