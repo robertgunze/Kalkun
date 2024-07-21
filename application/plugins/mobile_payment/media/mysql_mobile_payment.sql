@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `plugin_mobile_payment_transaction` (
   `merchant_id` int(11) NOT NULL,
   `super_type` int(11) NOT NULL,
   `type` int(11) NOT NULL,
-  `receipt` varchar(10) NOT NULL,
+  `receipt` varchar(100) NOT NULL,
   `time` datetime NOT NULL,
   `phonenumber` varchar(45)  NOT NULL,
   `name` varchar(255) NOT NULL,
