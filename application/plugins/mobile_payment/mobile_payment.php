@@ -84,13 +84,13 @@ function mobile_payment($sms)
     $CI->load->library('mobile_payment/webhook', 'webhook');
 	$CI->load->library('mobile_payment/mapper', 'mapper');
     require_once(APPPATH."plugins/mobile_payment/libraries/Transaction.php");
-	log_message('info',var_dump($sms));
+	//log_message('info',var_dump($sms));
 
 	//process payment and forward to an end-point
 	$countryISOCode = $CI->plugin_model->get_country_iso_code();
 	$merchant = $CI->plugin_model->get_merchant();
-	log_message('info', var_dump("libraries/parsers/{$countryISOCode}_*.php"));
-	log_message('info', var_dump(glob(APPPATH."plugins/mobile_payment/libraries/parsers/{$countryISOCode}_*.php")));
+	//log_message('info', var_dump("libraries/parsers/{$countryISOCode}_*.php"));
+	//log_message('info', var_dump(glob(APPPATH."plugins/mobile_payment/libraries/parsers/{$countryISOCode}_*.php")));
 	foreach (glob(APPPATH."plugins/mobile_payment/libraries/parsers/{$countryISOCode}_*.php") as $file) {
 		require_once($file);
 
