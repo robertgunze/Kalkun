@@ -59,7 +59,7 @@ class Tnm extends PaymentStrategy{
 		
 		} else {
 			$result["super_type"] = Transaction::MONEY_NEUTRAL;
-			$result["type"] = self::UNKNOWN;
+			$result["type"] = Transaction::UNKNOWN;
 		}
 
 		return $result;
