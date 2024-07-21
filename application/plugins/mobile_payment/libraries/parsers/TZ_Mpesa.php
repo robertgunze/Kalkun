@@ -45,24 +45,22 @@ class Mpesa extends PaymentStrategy{
                             "costs" => 0
                      );
         
-        // REFACTOR: should be split into subclasses
 		if (strpos($input, "You have received") > 0) {
 			$result["super_type"] = Transaction::MONEY_IN;
 			$result["type"] = Transaction::PAYMENT_RECEIVED;
 
-			$temp = array();
-			//BG60DRTIZP8 Confirmed.You have received Tsh200.00 from 255768406406 - ROBERT GUNZE MAKOYE on 6/7/24 at 7:44 PM New M-Pesa balance is Tsh350.00.
-			//preg_match_all("/([A-Z0-9]+) Confirmed\.[\s\n]+You have received Tsh([0-9\.\,]+) from[\s\n]+([A-Z ]+) +on (\d\d?\/\d\d?\/\d\d) at (\d\d?:\d\d [AP]M)[\s\n]+New M-PESA balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			preg_match_all("/([A-Z0-9]+) Confirmed\.You have received Tsh([0-9\.\,]+) from[\s\n]+([0-9]+) -[\s\n]+([A-Z ]+) on (\d{1,2}(\/|-)\d{1,2}(\/|-)\d{2,4}) at (\d{1,2}:\d{1,2} [AP]M)[\s\n]+New M-Pesa balance is Tsh([0-9\.\,]+)/mi", $input, $temp);
-			//print_r($temp[1][0]);die;
-            if (isset($temp[1][0])) {
-				$result["receipt"] = $temp[1][0];
-				$result["amount"] = Utility::numberInput($temp[2][0]);
-				$result["phone"] = $temp[3][0];
-				$result["name"] = $temp[4][0];
-				$result["time"] = $this->dateInput($temp[5][0] . " " . $temp[6][0]);
-				$result["balance"] = Utility::numberInput($temp[7][0]);
-			}
+			$regex = '/([A-Z0-9]+) Confirmed\.You have received Tsh([\d\.]+) from (\d+) - ([A-Z ]+) on (\d{1,2}\/\d{1,2}\/\d{2}) at (\d{1,2}:\d{2} [APM]{2}) New M-Pesa balance is Tsh([\d\.]+)\./';
+			if (preg_match($regex, $input, $matches)) {
+
+				list($full_match, $transaction_id, $amount_received, $sender_number, $sender_name, $date, $time, $new_balance) = $matches;
+
+				$result["receipt"] = $transaction_id;
+				$result["amount"] = Utility::numberInput($amount_received);
+				$result["phone"] = $sender_number;
+				$result["name"] = $sender_name;
+				$result["time"] = $this->dateInput($date . " " . $time);
+				$result["balance"] = Utility::numberInput($new_balance);
+			} 
 
 		} elseif (preg_match("/sent to .+ for account/", $input) > 0) {
 			$result["super_type"] = Transaction::MONEY_OUT;
