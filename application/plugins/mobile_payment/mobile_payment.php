@@ -101,12 +101,12 @@ function mobile_payment($sms)
 		
 		if (class_exists($class) && $class::alias == $from) {
 			//$transactionMapper = new Mapper(new $class);
-			echo "parser_class: " . var_export($class, false) . " alias: ".$class::alias . " from: ".$from.  "<br>";
+			echo "parser_class: " . var_export($class, true) . " alias: ".$class::alias . " from: ".$from.  "<br>";
 			$transactionMapper = $CI->mapper->set_payment_processor(new $class);
 			$transactionMapper->input = $message;
 			$transactionData = $transactionMapper->processTransaction($merchant->merchant_id);
 			$transactionData['merchant_id'] = $merchant->merchant_id;
-			echo "transactionData: " . var_export($transactionData, false) . "<br>";
+			echo "transactionData: " . var_export($transactionData, true) . "<br>";
 			if ($transactionData['super_type'] !== Transaction::MONEY_IN) continue;
 			//save transaction data
 			if ($transaction_id = $CI->plugin_model->save_transaction($transactionData)) {
