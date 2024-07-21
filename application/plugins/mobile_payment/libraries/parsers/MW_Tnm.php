@@ -53,7 +53,8 @@ class Tnm extends PaymentStrategy{
 				$result["amount"] = Utility::numberInput($amount);
 				$result["name"] = $sender_name;
 				$result["phone"] = $sender_number;
-				$result["time"] = strtotime(date("Y-m-d H:i:s"));
+				//$result["time"] = strtotime(date("Y-m-d H:i:s"));
+				$result["time"] = date("Y-m-d H:i:s");
 				$result["balance"] = Utility::numberInput($balance);
 			}
 		

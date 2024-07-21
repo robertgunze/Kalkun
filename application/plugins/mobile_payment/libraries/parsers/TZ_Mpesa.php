@@ -58,7 +58,8 @@ class Mpesa extends PaymentStrategy{
 				$result["amount"] = Utility::numberInput($amount_received);
 				$result["phone"] = $sender_number;
 				$result["name"] = $sender_name;
-				$result["time"] = $this->dateInput($date . " " . $time);
+				//$result["time"] = $this->dateInput($date . " " . $time);
+				$result["time"] = date("Y-m-d H:i:s");
 				$result["balance"] = Utility::numberInput($new_balance);
 			} 
 
