@@ -22,7 +22,7 @@ class Airtel extends PaymentStrategy{
     }
 
     //put your code here
-    public function parse(Mapper $transaction){
+    public function parse(Mapper $mapper){
         //implement code to parse AIRTEL MONEY sms from merchant's phone
         $input = $mapper->input;
         $result = array(
