@@ -16,7 +16,7 @@ require_once(__DIR__.'/../Transaction.php');
 require_once(__DIR__.'/../PaymentStrategy.php');
 require_once(__DIR__.'/../Mapper.php');
 
-class TigoParser extends PaymentStrategy{
+class TigoPesa extends PaymentStrategy{
 
   const alias = 'TIGOPESA';
   const countryCode = '+255';
