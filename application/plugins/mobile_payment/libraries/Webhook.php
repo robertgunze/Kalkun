@@ -73,7 +73,7 @@ class Webhook {
 	public function prepare_post_data ($country, $processor, $merchant, $service, $payment) {
 
 		return array(
-			"requestId" => $payment->id,
+			"requestId" => "{$payment->id}",
 			"service" => $service,
 			"payer" => array(
 				"name" => $payment->name,
