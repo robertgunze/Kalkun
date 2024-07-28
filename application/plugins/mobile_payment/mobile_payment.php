@@ -112,7 +112,12 @@ function mobile_payment($sms)
 			//save transaction data
 			try {
 
-				if ($transaction_id = $CI->plugin_model->save_transaction($transactionData)) {
+				if (
+					isset($transactionData['receipt']) 
+					&& !$CI->plugin_model->check_transaction($transactionData['receipt']) 
+					&& ($transaction_id = $CI->plugin_model->save_transaction($transactionData))) 
+				
+				{
 					$service = $merchant->service;
 					$transactionData['id'] = $transaction_id;
 					$payment = (object)$transactionData;
