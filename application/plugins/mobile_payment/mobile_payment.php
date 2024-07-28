@@ -72,7 +72,7 @@ function mobile_payment_install()
 function mobile_payment($sms)
 {
 	$config = mobile_payment_initialize();
-	//log_message('info',var_dump($config));
+	log_message("info","config: ". var_export($config, true));
 	$message = $sms->TextDecoded;
 	$from = $sms->SenderNumber;
     $smscenter = $sms->SMSCNumber;
@@ -101,13 +101,13 @@ function mobile_payment($sms)
 		
 		if (class_exists($class) && $class::alias == $from) {
 			//$transactionMapper = new Mapper(new $class);
-			echo "parser_class: " . var_export($class, true) . " alias: ".$class::alias . " from: ".$from.  "<br>";
-			echo "parser_class: " . var_export($class, true) . " message: ".$message . " from: ".$from.  "<br>";
+			log_message("debug", "parser_class: " . var_export($class, true) . " alias: ".$class::alias . " from: ".$from);
+			log_message("debug", "parser_class: " . var_export($class, true) . " message: ".$message . " from: ".$from);
 			$transactionMapper = $CI->mapper->set_payment_processor(new $class);
 			$transactionMapper->input = $message;
 			$transactionData = $transactionMapper->processTransaction($merchant->merchant_id);
 			$transactionData['merchant_id'] = $merchant->merchant_id;
-			echo "transactionData: " . var_export($transactionData, true) . "<br>";
+			log_message("debug", "transactionData: " . var_export($transactionData, true));
 			if ($transactionData['super_type'] !== Transaction::MONEY_IN) continue;
 			//save transaction data
 			if ($transaction_id = $CI->plugin_model->save_transaction($transactionData)) {
@@ -116,7 +116,7 @@ function mobile_payment($sms)
 				$payment = (object)$transactionData;
 				$payload = $CI->webhook->prepare_post_data($countryISOCode, $processor, $merchant, $service, $payment);
 				$response = $CI->webhook->post($webhook_url, $payload);
-				log_message('info', var_dump($response));
+				log_message('info', var_export($response, true));
 			}
 		}
 	}
