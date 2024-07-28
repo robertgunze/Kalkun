@@ -110,13 +110,19 @@ function mobile_payment($sms)
 			log_message("debug", "transactionData: " . var_export($transactionData, true));
 			if ($transactionData['super_type'] !== Transaction::MONEY_IN) continue;
 			//save transaction data
-			if ($transaction_id = $CI->plugin_model->save_transaction($transactionData)) {
-				$service = $merchant->service;
-				$transactionData['id'] = $transaction_id;
-				$payment = (object)$transactionData;
-				$payload = $CI->webhook->prepare_post_data($countryISOCode, $processor, $merchant, $service, $payment);
-				$response = $CI->webhook->post($webhook_url, $payload);
-				log_message('info', var_export($response, true));
+			try {
+
+				if ($transaction_id = $CI->plugin_model->save_transaction($transactionData)) {
+					$service = $merchant->service;
+					$transactionData['id'] = $transaction_id;
+					$payment = (object)$transactionData;
+					$payload = $CI->webhook->prepare_post_data($countryISOCode, $processor, $merchant, $service, $payment);
+					$response = $CI->webhook->post($webhook_url, $payload);
+					log_message('info', var_export($response, true));
+				}
+
+			} catch (Exception $ex) {
+				log_message("debug", "plugin::mobile_payment::error: {$ex->getMessage()}");
 			}
 		}
 	}
