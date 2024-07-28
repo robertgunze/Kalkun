@@ -20,7 +20,7 @@ class Utility {
 		} else {
 			$amount = (int)$input;
 		}
-		return floatval($amount/100);
+		return floatval($amount/100);// amount in cents over 100
 	}
 
 	public static function dateInput($input) {
