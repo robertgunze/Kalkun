@@ -13,7 +13,7 @@ require_once(__DIR__.'/../Mapper.php');
 
 class Airtel extends PaymentStrategy{
 
-    const alias = 'Airtel';
+    const alias = 'AirtelMoney';
     const countryCode = '+265';
     
 	public function dateInput($time) {
