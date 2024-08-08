@@ -19,7 +19,7 @@ require_once(__DIR__.'/../Mapper.php');
 class TigoPesa extends PaymentStrategy{
 
   const alias = 'TIGOPESA';
-  const countryCode = '+255';
+  const countryCode = '255';
 
     //put your code here
   public function parse(Mapper $transaction){

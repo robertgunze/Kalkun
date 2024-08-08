@@ -88,6 +88,7 @@ function mobile_payment($sms)
 
 	//process payment and forward to an end-point
 	$countryISOCode = $CI->plugin_model->get_country_iso_code();
+	$countryCode = '';// phone code i.e 255, 265 etc.
 	$merchant = $CI->plugin_model->get_merchant();
 	//log_message('info', var_dump("libraries/parsers/{$countryISOCode}_*.php"));
 	//log_message('info', var_dump(glob(APPPATH."plugins/mobile_payment/libraries/parsers/{$countryISOCode}_*.php")));
@@ -101,6 +102,7 @@ function mobile_payment($sms)
 		
 		if (class_exists($class) && $class::alias == $from) {
 			//$transactionMapper = new Mapper(new $class);
+			$countryCode = $class::countryCode;
 			log_message("debug", "parser_class: " . var_export($class, true) . " alias: ".$class::alias . " from: ".$from);
 			log_message("debug", "parser_class: " . var_export($class, true) . " message: ".$message . " from: ".$from);
 			$transactionMapper = $CI->mapper->set_payment_processor(new $class);
@@ -121,7 +123,7 @@ function mobile_payment($sms)
 					$service = $merchant->service;
 					$transactionData['id'] = $transaction_id;
 					$payment = (object)$transactionData;
-					$payload = $CI->webhook->prepare_post_data($countryISOCode, $processor, $merchant, $service, $payment);
+					$payload = $CI->webhook->prepare_post_data($countryISOCode, $countryCode, $processor, $merchant, $service, $payment);
 					$response = $CI->webhook->post($webhook_url, $payload);
 					log_message('info', var_export($response, true));
 				}

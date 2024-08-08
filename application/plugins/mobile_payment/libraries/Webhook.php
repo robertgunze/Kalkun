@@ -70,7 +70,7 @@ class Webhook {
 	 * @param object $payment
      * @return  object
 	 */
-	public function prepare_post_data ($country, $processor, $merchant, $service, $payment) {
+	public function prepare_post_data ($country, $phoneCode, $processor, $merchant, $service, $payment) {
 
 		return array(
 			"requestId" => "{$payment->id}",
@@ -85,7 +85,7 @@ class Webhook {
 			"customer" => array(
 				"number" => $payment->phonenumber,
 				"name" => $payment->name,
-				"mobile" => $payment->phonenumber,
+				"mobile" => "{$phoneCode}{$payment->phonenumber}",
 				"institution" => $merchant->name,
 				"category" => "" ///Can be Domestic,industrial,etc bases on type of utility. etc
 			),

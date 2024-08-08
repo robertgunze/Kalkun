@@ -14,7 +14,7 @@ require_once(__DIR__.'/../Mapper.php');
 class Mpesa extends PaymentStrategy{
 
 	const alias = 'M-PESA';
-    const countryCode = '+255';
+    const countryCode = '255';
     
     
     function __construct() {

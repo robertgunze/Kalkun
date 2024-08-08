@@ -14,7 +14,7 @@ require_once(__DIR__.'/../Mapper.php');
 class Tnm extends PaymentStrategy{
 
     const alias = 'TNM';
-    const countryCode = '+265';
+    const countryCode = '265';
 
 	public function dateInput($time) {
 		$dt = \DateTime::createFromFormat("j/n/y h:i A", $time);
