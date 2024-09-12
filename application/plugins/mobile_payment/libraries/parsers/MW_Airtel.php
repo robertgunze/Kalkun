@@ -41,23 +41,25 @@ class Airtel extends PaymentStrategy{
                      );
         
         // REFACTOR: should be split into subclasses
-		if (strpos($input, "you have received") > 0) {
+		if (strpos($input, "You have received") > 0) {
 			$result["super_type"] = Transaction::MONEY_IN;
 			$result["type"] = Transaction::PAYMENT_RECEIVED;
 
-			$regex = '/Trans\.ID\s*:\s*([A-Z0-9\.]+)\.\s*Dear customer, you have received MK\s*([\d\.]+)\s*from\s*([\d]+),\s*([A-Z ]+)\s*.\s*Your balance is MK\s*([\d\.]+)\./';
+			$regex = '/Trans ID:\s*([A-Z0-9\.]+)\s*You have received MK\s*([\d,\.]+)\s*from\s*(\d{3}\*{4}\d{2})\s*Ref #(\d+)\.\s*Your new balance is MK\s*([\d,\.]+)/';
+
 			if (preg_match($regex, $input, $matches)) {
-				list($full_match, $transaction_id, $amount_received, $sender_number, $sender_name, $new_balance) = $matches;
+				list($full_match, $transaction_id, $amount_received, $masked_sender_number, $reference, $new_balance) = $matches;
+				
 				$result["receipt"] = $transaction_id;
 				$result["amount"] = Utility::numberInput($amount_received);
-				//$result["amount"] = floatval(str_replace(',',$amount_received));
-				$result["name"] = $sender_name;
-				$result["phone"] = $sender_number;
+				//$result["name"] = $sender_name;
+				$result["phone"] = $masked_sender_number;
+				$result["account"] = $reference;
 				//$result["time"] = strtotime(date("Y-m-d H:i:s"));
 				$result["time"] = date("Y-m-d H:i:s");
 				$result["balance"] = Utility::numberInput($new_balance);
-				//$result["balance"] = floatval(str_replace(',',$new_balance));
-			}
+
+			} 
 
 		}  else {
 			$result["super_type"] = Transaction::MONEY_NEUTRAL;
