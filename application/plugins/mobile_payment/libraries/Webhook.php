@@ -91,13 +91,13 @@ class Webhook {
 			),
 			"payment" => array(
 				"timeStamp" => $payment->time, ////DateTime when the Payment actually happened
-				"referenceNumber" => $payment->phonenumber,///Specific Reference Number used during Payment processing. eng. controlNumber,MEter Number or Specific Payment Reference incase it is different from control number modality
+				"referenceNumber" => $payment->account,///Specific Reference Number used during Payment processing. eng. controlNumber,MEter Number or Specific Payment Reference incase it is different from control number modality
 				"receiptNumber" => $payment->receipt,
-				"deviceNumber" => "",//Can be memter number, can be any IOT device Number
+				"deviceNumber" => $payment->account,//Can be memter number, can be any IOT device Number
 				"amount" => $payment->amount,
 				"currency" => $merchant->currency,
 				"credits" => NULL, ///When this is not set the application eill look for tarrifs from the tarrifs management service or tarrifs details provided
-				"description" => "{$service} usage payment for {$payment->phonenumber}"
+				"description" => "{$service} usage payment for {$payment->account}"
 			)
 			//"tariff" => array(),
 			//"callBackUrl" => "",
